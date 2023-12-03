@@ -53,5 +53,3 @@ Ensure that your browser supports OffscreenCanvas, WebGL, and wasm simd. The fol
 
 - In Firefox, pixi.js may encounter a `WebGL context is lost` issue, resulting in slow rendering.
   - Issue tracking: https://github.com/pixijs/pixijs/issues/6494
-- The behavior of `transferFromImageBitmap` is inconsistent across different browsers, leading to varying results. A temporary solution is to use `drawImage` to address this issue.
-  - Issue tracking: https://github.com/whatwg/html/issues/7833

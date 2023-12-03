@@ -25,6 +25,10 @@ worker.addEventListener('message', (ev) => {
     const { type, payload } = ev.data as MsgData;
     if (type === MsgDataEnum.render) {
         const { bitmap, fps } = payload;
+        if (canvas.width !== bitmap.width || canvas.height !== bitmap.height) {
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
+        }
         ctx.transferFromImageBitmap(bitmap);
         fpsDisplay.textContent = fps.toString();
     }
@@ -50,13 +54,3 @@ controlButton.addEventListener('click', () => {
     controlButton.value = pause ? 'false' : 'true';
     controlButton.textContent = pause ? '恢復' : '暫停';
 });
-
-const resizeObserver = new ResizeObserver((entrys) => {
-    for (const entry of entrys) {
-        const { width, height } = entry.contentRect;
-        canvas.width = width;
-        canvas.height = height;
-    }
-});
-
-resizeObserver.observe(canvas);
