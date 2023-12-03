@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>wasm-game-of-life</title>
+        <script type="module" src="./src/index.ts"></script>
+    </head>
+
+    <body class="bg-light-900">
+        <div class="flex h-screen flex-col items-center justify-center">
+            <div class="text-2xl text-indigo-600">
+                <span class="i-svg-spinners:blocks-wave inline-block"></span>
+                <span>FPS: </span>
+                <span id="fpsDisplay" class="w-60px inline-block">0</span>
+            </div>
+            <button
+                id="controlButton"
+                class="rounded-2 m-3 cursor-pointer border-none bg-blue-600 px-6 py-2 text-xl text-white hover:bg-blue-700"
+                value="true"
+            >
+                暫停
+            </button>
+            <div class="w-80% max-h-4xl bg-light-600 shadow-dark rounded p-2 shadow-md">
+                <canvas id="gameCanvas" class="max-h-full w-full"></canvas>
+            </div>
+        </div>
+    </body>
+</html>
