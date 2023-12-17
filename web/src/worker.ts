@@ -11,7 +11,7 @@ let app: Application;
 
 function startTick() {
     clearInterval(tickTimer);
-    tickTimer = setInterval(() => universe.tick(), 1000 / 30);
+    tickTimer = setInterval(() => universe.tick(), 1000 / 60);
 }
 
 function createRectTexture(renderer: IRenderer, color: ColorSource, size: number) {
@@ -20,7 +20,7 @@ function createRectTexture(renderer: IRenderer, color: ColorSource, size: number
     graphics.drawRect(0, 0, size, size);
     graphics.endFill();
     const texture = renderer.generateTexture(graphics);
-    graphics.clear();
+    graphics.destroy();
     return texture;
 }
 
