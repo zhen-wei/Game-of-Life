@@ -9,6 +9,7 @@ export interface InitPayload {
     width: number;
     height: number;
     cellSize: number;
+    canvas: OffscreenCanvas;
     deadColor?: string;
     aliveColor?: string;
 }
@@ -18,14 +19,9 @@ export interface TogglePayload {
     col: number;
 }
 
-export interface RenderPayload {
-    bitmap: ImageBitmap;
-    fps: number;
-}
-
 export interface MsgDataMap {
     [MsgDataEnum.init]: InitPayload;
-    [MsgDataEnum.render]: RenderPayload;
+    [MsgDataEnum.render]: Number;
     [MsgDataEnum.toggle]: TogglePayload;
     [MsgDataEnum.pause]: boolean;
 }

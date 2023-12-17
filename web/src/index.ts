@@ -3,9 +3,9 @@ import type { MsgData } from './payload.js';
 import { createMsgData, MsgDataEnum } from './payload.js';
 
 const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+const offscreenCanvas = canvas.transferControlToOffscreen();
 const controlButton = document.getElementById('controlButton') as HTMLButtonElement;
 const fpsDisplay = document.getElementById('fpsDisplay') as HTMLDivElement;
-const ctx = canvas.getContext('bitmaprenderer')!;
 
 const width = 640;
 const height = 360;
@@ -18,19 +18,15 @@ worker.postMessage(
         width,
         height,
         cellSize,
+        canvas: offscreenCanvas,
     }),
+    [offscreenCanvas],
 );
 
 worker.addEventListener('message', (ev) => {
     const { type, payload } = ev.data as MsgData;
     if (type === MsgDataEnum.render) {
-        const { bitmap, fps } = payload;
-        if (canvas.width !== bitmap.width || canvas.height !== bitmap.height) {
-            canvas.width = bitmap.width;
-            canvas.height = bitmap.height;
-        }
-        ctx.transferFromImageBitmap(bitmap);
-        fpsDisplay.textContent = fps.toString();
+        fpsDisplay.textContent = payload.toString();
     }
 });
 

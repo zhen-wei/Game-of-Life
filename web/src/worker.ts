@@ -1,17 +1,13 @@
 import type { ColorSource, IRenderer } from '@pixi/webworker';
 import { Application, Graphics, ParticleContainer, Sprite } from '@pixi/webworker';
 import init, { Universe } from '../../pkg/game_of_life.js';
-import type { InitPayload, MsgData, RenderPayload, TogglePayload } from './payload.js';
+import type { InitPayload, MsgData, TogglePayload } from './payload.js';
 import { createMsgData, MsgDataEnum } from './payload.js';
 
 let universe: Universe;
 let tickTimer = 0;
 
-const canvas = new OffscreenCanvas(256, 256);
-const app = new Application({
-    view: canvas,
-    hello: true,
-});
+let app: Application;
 
 function startTick() {
     clearInterval(tickTimer);
@@ -29,9 +25,13 @@ function createRectTexture(renderer: IRenderer, color: ColorSource, size: number
 }
 
 async function start(initPayload: InitPayload): Promise<void> {
-    const { width, height, cellSize, deadColor = '#FFFFFF', aliveColor = '#000000' } = initPayload;
+    const { width, height, canvas, cellSize, deadColor = '#FFFFFF', aliveColor = '#000000' } = initPayload;
 
     await init();
+    app = new Application({
+        view: canvas,
+        hello: true,
+    });
     app.renderer.background.color = deadColor;
     app.renderer.resize((cellSize + 1) * width + 1, (cellSize + 1) * height + 1);
 
@@ -65,12 +65,7 @@ async function start(initPayload: InitPayload): Promise<void> {
     };
     app.ticker.add(() => {
         drawCells();
-        const bitmap = canvas.transferToImageBitmap();
-        const payload: RenderPayload = {
-            bitmap: bitmap,
-            fps: Math.round(app.ticker.FPS),
-        };
-        self.postMessage(createMsgData(MsgDataEnum.render, payload), [bitmap]);
+        self.postMessage(createMsgData(MsgDataEnum.render, Math.round(app.ticker.FPS)));
     });
     startTick();
 }
