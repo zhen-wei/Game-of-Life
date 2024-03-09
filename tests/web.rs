@@ -1,5 +1,5 @@
 use wasm_bindgen_test::*;
-use wasm_game_of_life::universe::Universe;
+use game_of_life::universe::Universe;
 
 wasm_bindgen_test_configure!(run_in_browser);
 
