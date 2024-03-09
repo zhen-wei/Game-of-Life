@@ -13,7 +13,7 @@ The demo runs WebAssembly (wasm) in a web worker and performs off-screen renderi
 ## Features
 
 - Utilizes WebAssembly and offscreen rendering in a worker for improved performance.
-- Implements WebGL rendering using [pixi.js](https://pixijs.com/).
+- Using [pixi.js](https://pixijs.com/) for WebGPU/WebGL rendering.
 - Try using [unocss](https://unocss.dev/) for styling in small exercises.
 
 
@@ -51,5 +51,4 @@ Ensure that your browser supports OffscreenCanvas, WebGL, and wasm simd. The fol
 
 ## Known Issues
 
-- In Firefox, pixi.js may encounter a `WebGL context is lost` issue, resulting in slow rendering.
-  - Issue tracking: https://github.com/pixijs/pixijs/issues/6494
+The current performance of WebGPU implementation is not as good as WebGL, but it has potential for the future.
