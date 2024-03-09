@@ -23,6 +23,6 @@
         "vite": "^5.1.5"
     },
     "dependencies": {
-        "@pixi/webworker": "^7.4.0"
+        "pixi.js": "^8.0.1"
     }
 }

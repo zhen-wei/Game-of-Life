@@ -1,5 +1,13 @@
-import type { ColorSource, IRenderer } from '@pixi/webworker';
-import { Application, Graphics, ParticleContainer, Sprite } from '@pixi/webworker';
+import type { ColorSource, Renderer } from 'pixi.js';
+import  {
+    DOMAdapter,
+    WebWorkerAdapter,
+    Application,
+    Graphics,
+    Container,
+    Sprite
+} from 'pixi.js';
+// import { Application, Graphics, Container, Sprite } from '@pixi/webworker';
 import init, { Universe } from '../../pkg/game_of_life.js';
 import type { InitPayload, MsgData, TogglePayload } from './payload.js';
 import { createMsgData, MsgDataEnum } from './payload.js';
@@ -7,18 +15,19 @@ import { createMsgData, MsgDataEnum } from './payload.js';
 let universe: Universe;
 let tickTimer = 0;
 
-let app: Application;
+DOMAdapter.set(WebWorkerAdapter);
+
+const app = new Application();
 
 function startTick() {
     clearInterval(tickTimer);
     tickTimer = setInterval(() => universe.tick(), 1000 / 60);
 }
 
-function createRectTexture(renderer: IRenderer, color: ColorSource, size: number) {
-    const graphics = new Graphics();
-    graphics.beginFill(color);
-    graphics.drawRect(0, 0, size, size);
-    graphics.endFill();
+function createRectTexture(renderer: Renderer, color: ColorSource, size: number) {
+    const graphics = new Graphics()
+        .rect(0, 0, size, size)
+        .fill(color);
     const texture = renderer.generateTexture(graphics);
     graphics.destroy();
     return texture;
@@ -27,23 +36,22 @@ function createRectTexture(renderer: IRenderer, color: ColorSource, size: number
 async function start(initPayload: InitPayload): Promise<void> {
     const { width, height, canvas, cellSize, deadColor = '#FFFFFF', aliveColor = '#000000' } = initPayload;
 
-    await init();
-    app = new Application({
-        view: canvas,
-        hello: true,
-    });
+    await Promise.all([
+        init(),
+        app.init({
+            canvas: canvas,
+            hello: true,
+        })
+    ]);
+
     app.renderer.background.color = deadColor;
     app.renderer.resize((cellSize + 1) * width + 1, (cellSize + 1) * height + 1);
 
     const maxSize = width * height;
     const texture = createRectTexture(app.renderer, aliveColor, cellSize);
 
-    const sprites = new ParticleContainer(maxSize, {
-        scale: false,
-        position: false,
-        rotation: false,
-        uvs: false,
-        alpha: true,
+    const sprites = new Container({
+        isRenderGroup: true,
     });
     for (let i = 0; i < maxSize; i++) {
         const cell = new Sprite(texture);
