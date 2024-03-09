@@ -18,9 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: Swatinem/rust-cache@v2
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
         with:
           version: 8
+          run_install: false
       - uses: actions/setup-node@v4
         with:
           node-version: 20
